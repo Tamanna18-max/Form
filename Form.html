@@ -1,0 +1,181 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Form Assignment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group input[type="file"] {
+            padding: 3px;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #007BFF;
+        }
+        .form-group .error {
+            color: red;
+            font-size: 14px;
+        }
+        .form-group .gender {
+            display: flex;
+            gap: 10px;
+        }
+        .form-group button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background: #0056b3;
+        }
+        .form-group .output-table {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Registration Form</h1>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required minlength="3">
+                <span class="error" id="nameError"></span>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" required>
+                <span class="error" id="emailError"></span>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required minlength="8">
+                <span class="error" id="passwordError"></span>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" pattern="\d{10}" required>
+                <span class="error" id="phoneError"></span>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" required>
+                <span class="error" id="dobError"></span>
+            </div>
+            <div class="form-group">
+                <label>Gender:</label>
+                <div class="gender">
+                    <label><input type="radio" name="gender" value="Male" required> Male</label>
+                    <label><input type="radio" name="gender" value="Female"> Female</label>
+                    <label><input type="radio" name="gender" value="Prefer Not to Say"> Prefer Not to Say</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" required>
+                    <option value="">Select</option>
+                    <option value="USA">USA</option>
+                    <option value="India">India</option>
+                    <option value="Canada">Canada</option>
+                    <option value="UK">UK</option>
+                    <option value="Australia">Australia</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="profilePic">Profile Picture:</label>
+                <input type="file" id="profilePic" accept="image/*" required>
+                <span class="error" id="fileError"></span>
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" id="agreeTerms" required> I agree to the terms and conditions</label>
+                <span class="error" id="termsError"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit</button>
+            </div>
+            <div class="form-group output-table" id="output"></div>
+        </form>
+    </div>
+    <script>
+        const form = document.getElementById('registrationForm');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const errors = document.querySelectorAll('.error');
+            errors.forEach(error => error.textContent = '');
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const phone = document.getElementById('phone').value;
+            const dob = document.getElementById('dob').value;
+            const gender = document.querySelector('input[name="gender"]:checked')?.value;
+            const country = document.getElementById('country').value;
+            const profilePic = document.getElementById('profilePic').files[0];
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+
+            // Validations
+            if (name.length < 3) {
+                document.getElementById('nameError').textContent = 'Name must be at least 3 characters.';
+                return;
+            }
+
+            const fileError = profilePic && profilePic.size > 2 * 1024 * 1024;
+            if (fileError) {
+                document.getElementById('fileError').textContent = 'File size must be less than 2MB.';
+                return;
+            }
+
+            const output = document.getElementById('output');
+            output.innerHTML = `
+                <table border="1" cellspacing="0" cellpadding="10">
+                    <tr><th>Name</th><td>${name}</td></tr>
+                    <tr><th>Email</th><td>${email}</td></tr>
+                    <tr><th>Phone</th><td>${phone}</td></tr>
+                    <tr><th>Date of Birth</th><td>${dob}</td></tr>
+                    <tr><th>Gender</th><td>${gender}</td></tr>
+                    <tr><th>Country</th><td>${country}</td></tr>
+                </table>
+            `;
+        });
+    </script>
+</body>
+</html>
